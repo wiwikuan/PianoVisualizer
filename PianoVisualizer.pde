@@ -31,8 +31,8 @@ void setup() {
   smooth(2);
   frameRate(60);
   initKeys();
-  MidiBus.list(); // 啟動時會列出 MIDI 輸入/輸出 設備，記下你想用的 MIDI 輸入編號，設定在下一行。
-  myBus = new MidiBus(this, 4, -1); // 編輯「this 後面那個數字」選擇 MIDI 輸入設備。
+  MidiBus.list(); // 啟動時會列出 MIDI Input/Output 裝置，記下你想用的 MIDI Input 裝置名稱，設定在下一行。
+  myBus = new MidiBus(this, "MIDI Input device name", -1); // 將「MIDI Input device name」代換成你的 MIDI Input 裝置。
 }
 
 void draw() {
