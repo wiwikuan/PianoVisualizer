@@ -10,13 +10,13 @@ How to use:
 4. Edit source code to select MIDI input port
 5. Enjoy!
 
-[NiceChord](http://nicechord.com/) has a instruction video [我寫了一個「鋼琴鍵盤顯示app」，免費送給大家 + 使用教學！](https://www.youtube.com/watch?v=37MvNiNqaCM)
+[NiceChord](http://nicechord.com/) has an instruction video [我寫了一個「鋼琴鍵盤顯示app」，免費送給大家 + 使用教學！](https://www.youtube.com/watch?v=37MvNiNqaCM)
 
 ---
 
 ## 繁體中文
 
-在您的影片及串流中顯示精簡鋼琴鍵盤!
+在您的影片及直播中顯示精簡鋼琴鍵盤!
 
 如何使用:
 
@@ -32,7 +32,7 @@ How to use:
 
 ## 简体中文
 
-在您的影片及串流中显示精简钢琴键盘!
+在您的影片及直播中显示精简钢琴键盘!
 
 如何使用:
 
