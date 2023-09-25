@@ -1,4 +1,6 @@
-import themidibus.*; //Import the midibus library
+import processing.javafx.*; // Import the JavaFX library
+import themidibus.*; // Import the midibus library
+
 MidiBus myBus; // The MidiBus
 
 boolean nowPedaling = false; // is it pedaling?（不要動）
@@ -8,7 +10,7 @@ int[] isPedaled = new int[128]; // what notes are pedaled (1 or 0)（不要動�
 color keyOnColor; // set it in setup()
 color pedaledColor; // set it in setup()
 
-int[] isBlack = {0, 11, 0, 13, 0, 0, 11, 0, 12, 0, 13, 0}; // 是黑鍵嗎？是的話，相對左方的白鍵位移多少？(default: {0, 11, 0, 13, 0, 0, 11, 0, 12, 0, 13, 0}）
+int[] isBlack = {0, 11, 0, 13, 0, 0, 11, 0, 12, 0, 13, 0}; // 是黑鍵嗎？是的話，相對左方的白鍵位移多少？（default: {0, 11, 0, 13, 0, 0, 11, 0, 12, 0, 13, 0}）
 int border = 3; // 左方留空幾個畫素？(default: 3)
 int whiteKeyWidth = 20; // 白鍵多寬？(default: 20)
 int whiteKeySpace = 1; // 白鍵間的縫隙多寬？(default: 1)
@@ -32,7 +34,8 @@ void setup() {
   frameRate(60);
   initKeys();
   MidiBus.list(); // 啟動時會列出 MIDI 輸入/輸出 設備，記下你想用的 MIDI 輸入編號，設定在下一行。
-  myBus = new MidiBus(this, 4, -1); // 編輯「this 後面那個數字」選擇 MIDI 輸入設備。
+  MidiReceiver receiver = new MidiReceiver();
+  myBus = new MidiBus(receiver, 999, -1); // 編輯「receiver 後面那個數字」選擇 MIDI 輸入設備。
 }
 
 void draw() {
@@ -108,36 +111,40 @@ void drawBlackKeys() {
   }
 }
 
-void noteOn(int channel, int pitch, int velocity) {
-  // Receive a noteOn
-  isKeyOn[pitch] = 1;
-  isFilled[pitch] = 100;
-  if (nowPedaling) {
-    isPedaled[pitch] = 1;
-  }
-}
+public class MidiReceiver {
 
-void noteOff(int channel, int pitch, int velocity) {
-  // Receive a noteOff
-  isKeyOn[pitch] = 0;
-  isFilled[pitch] = 0;
-}
-
-void controllerChange(int channel, int number, int value) {
-  // Receive a controllerChange
-  if (number == 64 && value >= 64) {
-    nowPedaling = true;
-    for (int i = 0; i<128; i++) {
-      // copy key on to pedal
-      isPedaled[i] = isKeyOn[i];
+  void noteOn(int channel, int pitch, int velocity) {
+    // Receive a noteOn
+    isKeyOn[pitch] = 1;
+    isFilled[pitch] = 100;
+    if (nowPedaling) {
+      isPedaled[pitch] = 1;
     }
   }
 
-  if (number == 64 && value < 64) {
-    nowPedaling = false;
-    for (int i = 0; i<128; i++) {
-      // reset isPedaledlin
-      isPedaled[i] = 0;
+  void noteOff(int channel, int pitch, int velocity) {
+    // Receive a noteOff
+    isKeyOn[pitch] = 0;
+    isFilled[pitch] = 0;
+  }
+
+  void controllerChange(int channel, int number, int value) {
+    // Receive a controllerChange
+    if (number == 64 && value >= 64) {
+      nowPedaling = true;
+      for (int i = 0; i<128; i++) {
+        // copy key on to pedal
+        isPedaled[i] = isKeyOn[i];
+      }
+    }
+
+    if (number == 64 && value < 64) {
+      nowPedaling = false;
+      for (int i = 0; i<128; i++) {
+        // reset isPedaledlin
+        isPedaled[i] = 0;
+      }
     }
   }
+
 }
