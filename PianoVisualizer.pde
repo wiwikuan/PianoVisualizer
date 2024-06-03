@@ -19,6 +19,7 @@ int bRadius = 4; // 黑鍵圓角(default: 4)
 int keyAreaY = 3; // 白鍵從 Y 軸座標多少開始？(default: 3)
 int keyAreaHeight = 70; // 白鍵多高？(default: 70)
 boolean rainbowMode = false; // 彩虹模式 (default: false)
+boolean noteNames = true; // 繪製音名（default: true）
 
 void setup() {
   int winWidth = (whiteKeyWidth+whiteKeySpace)*52 + (border*2); // recommended window width
@@ -27,18 +28,20 @@ void setup() {
   size(1098, 76, FX2D); // 視窗大小 (default: 1098, 76)
   colorMode(HSB, 360, 100, 100, 100);
   keyOnColor = color(326, 100, 100, 100); // <---- 編輯這裡換「按下時」的顏色！[HSB Color Mode] 
-  pedaledColor = color(326, 70, 60, 100); // <---- 編輯這裡換「踏板踩住」的顏色！[HSB Color Mode]
+  pedaledColor = color(326, 100, 70, 100); // <---- 編輯這裡換「踏板踩住」的顏色！[HSB Color Mode]
   smooth(2);
   frameRate(60);
   initKeys();
+  textAlign(CENTER, CENTER); 
   MidiBus.list(); // 啟動時會列出 MIDI 輸入/輸出 設備，記下你想用的 MIDI 輸入編號，設定在下一行。
-  myBus = new MidiBus(this, 4, -1); // 編輯「this 後面那個數字」選擇 MIDI 輸入設備。
+  myBus = new MidiBus(this, "Port 1", -1); // 編輯「this 後面那個數字」選擇 MIDI 輸入設備。
 }
 
 void draw() {
   background(0, 0, 30, 100);
   drawWhiteKeys();
   drawBlackKeys();
+  if (noteNames) {drawNoteNames();};
 }
 
 void initKeys() {
@@ -105,6 +108,22 @@ void drawBlackKeys() {
       int thisX = border + (wIndex-1)*(whiteKeyWidth+whiteKeySpace) + isBlack[i % 12];
       rect(thisX, keyAreaY-1, blackKeyWidth, blackKeyHeight, bRadius);
     }
+  }
+}
+
+void drawNoteNames() {
+  String[] noteNames = {"A", "B", "C", "D", "E", "F", "G"}; // 音名數組
+  
+  textSize(12); // 設置文字大小
+  fill(0, 0, 0, 75); // 設置文字顏色為黑色
+  
+  int wIndex = 0; // 白鍵索引
+  for (int i = 0; i < 52; i++) { // 遍歷所有白鍵
+    int thisX = border + wIndex * (whiteKeyWidth + whiteKeySpace);
+    int thisY = keyAreaY + keyAreaHeight - 13; // 調整文字的垂直位置
+    String noteName = noteNames[i % 7]; // 獲取對應的音名
+    text(noteName, thisX + whiteKeyWidth / 2, thisY); // 繪製音名文字
+    wIndex++;
   }
 }
 
